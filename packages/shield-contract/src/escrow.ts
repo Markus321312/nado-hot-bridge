@@ -46,7 +46,7 @@ class ShieldEscrow {
   };
 
   // --- Initialize ---
-  @call({})
+  @call({ payableFunction: true })
   init({ admin }: { admin: string }): void {
     assert(this.admin === "", "Already initialized");
     this.admin = admin;
@@ -56,7 +56,7 @@ class ShieldEscrow {
   // --- NEP-141 ft_on_transfer callback ---
   // Called by the USDC token contract when someone does ft_transfer_call to this contract
   // msg format: {"seller":"merchant.near","description":"Widget","timeout_minutes":1440}
-  @call({})
+  @call({ payableFunction: true })
   ft_on_transfer({
     sender_id,
     amount,
@@ -113,7 +113,7 @@ class ShieldEscrow {
   }
 
   // --- Buyer confirms delivery → release funds to seller ---
-  @call({})
+  @call({ payableFunction: true })
   confirm_delivery({ escrow_id }: { escrow_id: string }): NearPromise {
     const escrow = this._getEscrow(escrow_id);
     const caller = near.predecessorAccountId();
@@ -142,7 +142,7 @@ class ShieldEscrow {
   }
 
   // --- Timeout refund: anyone can call if timeout has passed ---
-  @call({})
+  @call({ payableFunction: true })
   claim_timeout_refund({ escrow_id }: { escrow_id: string }): NearPromise {
     const escrow = this._getEscrow(escrow_id);
 
@@ -176,7 +176,7 @@ class ShieldEscrow {
   }
 
   // --- Buyer opens dispute ---
-  @call({})
+  @call({ payableFunction: true })
   open_dispute({
     escrow_id,
     reason,
@@ -201,7 +201,7 @@ class ShieldEscrow {
   }
 
   // --- Admin resolves dispute ---
-  @call({})
+  @call({ payableFunction: true })
   resolve_dispute({
     escrow_id,
     release_to_seller,
